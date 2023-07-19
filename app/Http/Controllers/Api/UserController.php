@@ -70,22 +70,26 @@ class UserController extends Controller
         // return UserResource::make($user);
         $data = $request->validated();
 
-        return response()->json([
-            var_dump($data),
-        ]);
+        $image = isset($data['image']) ? $data['image'] : null;
 
-        // $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+        unset($data['image']);
 
-        // // unset($data['image']);
+        // if (array_key_exists('image', $data)) {
+        //     $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+        // }
 
-        // // $userAuthId = auth()->user()->id;
+        // if (array_key_exists('image', $data)) {
+        //     $user->image ? $user->update($data['image']) : $user->create($data['image']);
+        // }
 
-        // // $userUp = User::where('id', $userAuthId)->get();
+        $user->update($data);
 
-        // $user->image ? $user->update($data['image']) : $user->create($data['image']);
+        if ($image) {
+            $name = md5(Carbon::now().'_'.$image->getClientOriginalName())
+                .'.'.$image->getClientOriginalExtension();
+            $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
+        }
 
-        // $user->update($data['name']);
-
-        // return UserResource::make($user);
+        return UserResource::make($user);
     }
 }

@@ -15,12 +15,11 @@
         <div class="alert alert-danger text-center">Please fix the errors</div>
       </div> -->
 
-      <form @submit="upgradeUser(id)" enctype="multipart/form-data" ref="formRef">
+      <!-- <form @submit="upgradeUser(id)" enctype="multipart/form-data" ref="formRef"> -->
         <div class="form-floating">
           <input
             type="name"
             class="form-control"
-            id="floatingInput"
             v-model="name"
           />
           <!-- <div v-for="(error, key) in errors.name" :key="key" class="text-danger">
@@ -31,8 +30,8 @@
           <input
             type="file"
             class="form-control"
-            id="floatingInput"
-            v-on:change="onFileSelected"
+            @change="onFileSelected()"
+            ref="file"
           />
           <!-- <div
           v-for="(error, key) in errors.email"
@@ -43,15 +42,15 @@
         </div> -->
         </div>
 
-        <button class="w-100 btn btn-lg btn-outline-primary">Upgrade</button>
-        <!-- <button
+        <!-- <button class="w-100 btn btn-lg btn-outline-primary">Upgrade</button> -->
+        <button
           @click.prevent="upgradeUser(id)"
           class="w-100 btn btn-lg btn-outline-primary"
           type="submit"
         >
           Upgrade
-        </button> -->
-      </form>
+        </button>
+      <!-- </form> -->
     </main>
   </div>
 </template>
@@ -67,8 +66,7 @@ export default {
       id: null,
       name: null,
       image: null,
-      imageUp: null,
-      // selectedFile: null,
+      file: null,
     };
   },
 
@@ -87,18 +85,21 @@ export default {
     },
 
     upgradeUser(user) {
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-      };
+      // const config = {
+      //   headers: { "content-type": "multipart/form-data" },
+      // };
 
       const fd = new FormData();
-      fd.append("image", this.imageUp);
+      fd.append("image", this.file);
+      fd.append("name", this.name);
       // console.log(fd);
       api
-        .patch(`/api/auth/${user}`, {
-          name: this.name,
-          fd, config
-        })
+        .patch(`/api/auth/${user}`, 
+          fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      })
         .then((res) => {
           // Swal.fire("Added!", "User Upgrade Successfully!", "success");
 
@@ -109,9 +110,9 @@ export default {
         });
     },
 
-    onFileSelected(e) {
-      // console.log(e);
-      this.imageUp = e.target.files[0];
+    onFileSelected() {
+      this.file = this.$refs.file.files[0];
+      console.log(this.file);
     },
   },
 };

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\User;
+use App\Models\TodoList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,14 +11,15 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
-        'task',
-        'user_id',
+        'todolist_id',
+        'title',
+        'imageTask',
     ];
 
     protected $guarded = false;
 
-    public function user()
+    public function todolist()
     {
-        return $this->belongsTo( User::class, 'user_id', 'id');
+        return $this->belongsTo( TodoList::class, 'todolist_id', 'id');
     }
 }

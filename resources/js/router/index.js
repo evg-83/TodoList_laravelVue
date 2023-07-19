@@ -2,14 +2,14 @@ import * as VueRouter from "vue-router";
 
 const routes = [
   {
-    path: "/register",
-    name: "register",
-    component: () => import("../components/Auth/RegisterComponent.vue"),
+    path: "/users/register",
+    name: "user.register",
+    component: () => import("../components/User/RegisterComponent.vue"),
   },
   {
-    path: "/login",
-    name: "login",
-    component: () => import("../components/Auth/LoginComponent.vue"),
+    path: "/users/login",
+    name: "user.login",
+    component: () => import("../components/User/LoginComponent.vue"),
   },
   {
     path: "/",
@@ -17,15 +17,27 @@ const routes = [
     component: () => import("../components/HeaderComponent.vue"),
     children: [
       {
-        path: '/home',
+        path: "/home",
         name: "home",
         component: () => import("../components/Todo/HomeComponent.vue"),
       },
-      // {
-      //   path: '/home',
-      //   name: "home",
-      //   component: () => import("../components/Todo/HomeComponent.vue"),
-      // },
+      {
+        path: "/profile",
+        name: "user.profile",
+        component: () => import("../components/User/ProfileComponent.vue"),
+      },
+      {
+        path: "/todolist",
+        name: "todolist",
+        component: () => import("../components/Todo/TodolistComponent.vue"),
+      },
+      //TODO всегда нижний
+      {
+        path: "/:pathMatch(.*)*",
+        name: "404",
+        // TODO заменить компонент на 404ый!!!
+        component: () => import("../components/Todo/HomeComponent.vue"),
+      },
     ],
   },
 ];
@@ -36,19 +48,22 @@ const router = VueRouter.createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("x_xsrf_token");
+  const accessToken = localStorage.getItem("access_token");
 
-  if (!token) {
-    if (to.name === "login" || to.name === "register") {
+  if (!accessToken) {
+    if (to.name === "user.login" || to.name === "user.register") {
       return next();
     } else {
       return next({
-        name: "login",
+        name: "user.login",
       });
     }
   }
 
-  if (to.name === "login" || (to.name === "register" && token)) {
+  if (
+    (to.name === "user.login" || to.name === "user.register") &&
+    accessToken
+  ) {
     return next({
       name: "home",
     });

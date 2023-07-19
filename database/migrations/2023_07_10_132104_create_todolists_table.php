@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('todolists', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
-
-            $table->unsignedBigInteger('task_id')->nullable();
-
-            $table->foreign('task_id')
-                ->references('id')
-                ->on('tasks')
+            $table->foreignId('user_id')
+                ->nullable()
+                ->index()
+                ->constrained('users')
+                ->onUpdate('cascade')
                 ->onDelete('cascade');
-
+            $table->string('title')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('todolists');
     }
 };

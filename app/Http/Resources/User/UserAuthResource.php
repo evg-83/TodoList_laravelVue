@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class UserResource extends JsonResource
+class UserAuthResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,14 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $userAuth = Auth::user();
+
         return [
-            'id'       => $this->id,
-            'name'     => $this->name,
-            'email'    => $this->email,
-            'password' => $this->password,
-            'image'    => $this->image,
+            'id'       => $userAuth->id,
+            'name'     => $userAuth->name,
+            'email'    => $userAuth->email,
+            'password' => $userAuth->password,
+            'image'    => $userAuth->image,
         ];
     }
 }

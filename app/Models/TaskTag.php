@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class TaskTag extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'image',
         'task_id',
+        'tag_id',
     ];
 
     protected $guarded = false;

@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-
-            $table->unsignedBigInteger('task_id')->nullable();
-
-            $table->foreign('task_id')
-                ->references('id')
-                ->on('tasks')
-                ->onDelete('cascade');
-
+            $table->foreignId( 'user_id' )
+                ->nullable()
+                ->index()
+                ->constrained( 'users' )
+                ->onUpdate( 'cascade' )
+                ->onDelete( 'cascade' );
             $table->timestamps();
         });
     }

@@ -31,7 +31,7 @@
 
       <div class="form-floating mb-3">
         Don`t have an account?!
-        <router-link :to="{ name: 'register' }">Signup here</router-link>
+        <router-link :to="{ name: 'user.register' }">Signup here</router-link>
         <!-- <a href="#">Login here</a> -->
       </div>
 
@@ -41,7 +41,7 @@
         </label>
       </div> -->
       <button
-        @click.prevent="logUser"
+        @click.prevent="login"
         class="w-100 btn btn-lg btn-outline-primary"
         type="submit"
       >
@@ -67,23 +67,22 @@ export default {
   },
 
   methods: {
-    logUser() {
-      (this.errors.errStatus = ""),
-        axios.get("/sanctum/csrf-cookie").then((response) => {
-          axios
-            .post("/api/login", { email: this.email, password: this.password })
-            .then((res) => {
-              this.email = null;
-              this.password = null;
-              localStorage.setItem('x_xsrf_token', res.config.headers['X-XSRF-TOKEN'])
-              console.log(res);
-              this.$router.push({ name: "home" });
-            })
-            .catch((error) => {
-              if (error.response.status === 404) {
-                this.errors.errStatus = error.response.status;
-              }
-            });
+    login() {
+      this.errors.errStatus = "";
+      axios
+        .post("/api/auth/login", { email: this.email, password: this.password })
+        .then((res) => {
+          this.email = null;
+          this.password = null;
+          // console.log(res.data.access_token);
+          localStorage.setItem('access_token', res.data.access_token)
+          // localStorage.access_token = res.data.access_token
+          this.$router.push({ name: "home" });
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            this.errors.errStatus = error.response.status;
+          }
         });
     },
   },

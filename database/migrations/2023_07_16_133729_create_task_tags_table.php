@@ -11,16 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('task_tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('todolist_id')
+            $table->foreignId('task_id')
                 ->nullable()
                 ->index()
-                ->constrained('todolists')
+                ->constrained('tasks')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('title')->nullable();
-            $table->string('imageTask')->nullable();
+            $table->foreignId('tag_id')
+                ->nullable()
+                ->index()
+                ->constrained('tags')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('task_tags');
     }
 };

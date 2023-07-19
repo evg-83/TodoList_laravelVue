@@ -63,7 +63,7 @@
           placeholder="Password Confirmation"
           v-model="password_confirmation"
         />
-        <label for="floatingPassword">Password Confirmation</label>
+        <label for="floatingPassword">Confirm Password</label>
         <div
           v-for="(error, key) in errors.password_confirmation"
           :key="key"
@@ -75,7 +75,7 @@
 
       <div class="form-floating mb-3">
         Already have an account?!
-        <router-link :to="{ name: 'login' }">Login here</router-link>
+        <router-link :to="{ name: 'user.login' }">Login here</router-link>
         <!-- <a href="#">Login here</a> -->
       </div>
 
@@ -102,49 +102,50 @@ export default {
       password: null,
       password_confirmation: null,
       errors: {
-        name: null,
-        email: null,
-        password: null,
-        password_confirmation: null,
-        errStatus: null,
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        errStatus: "",
       },
     };
   },
 
   methods: {
     regUser() {
-      (this.errors.errStatus = ""), (this.errors.name = "");
-      this.errors.email = "";
-      this.errors.password = "";
+      this.errors.errStatus             = "";
+      this.errors.name                  = "";
+      this.errors.email                 = "";
+      this.errors.password              = "";
       this.errors.password_confirmation = "";
-      axios.get("/sanctum/csrf-cookie").then((response) => {
-        axios
-          .post("/api/register", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-            password_confirmation: this.password_confirmation,
-          })
-          .then((res) => {
-            this.name = null;
-            this.email = null;
-            this.password = null;
-            this.password_confirmation = null;
-            this.$router.push({ name: "login" });
-            console.log(res);
-          })
-          .catch((error) => {
-            if (error.response.status === 422) {
-              console.log(error.response.data.errors);
-              this.errors.errStatus = error.response.status;
-              this.errors.name = error.response.data.errors.name;
-              this.errors.email = error.response.data.errors.email;
-              this.errors.password = error.response.data.errors.password;
-              this.errors.password_confirmation =
-                error.response.data.errors.password_confirmation;
-            }
-          });
-      });
+      axios
+        .post("/api/users/register", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.password_confirmation,
+        })
+        .then((res) => {
+          this.name                  = null;
+          this.email                 = null;
+          this.password              = null;
+          this.password_confirmation = null;
+          localStorage.setItem('access_token', res.data.access_token)
+          this.$router.push({ name: "user.login" });
+          // this.$router.push({ name: "home" });
+          console.log(res);
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            console.log(error.response.data.errors);
+            this.errors.errStatus             = error.response.status;
+            this.errors.name                  = error.response.data.errors.name;
+            this.errors.email                 = error.response.data.errors.email;
+            this.errors.password              = error.response.data.errors.password;
+            this.errors.password_confirmation =
+              error.response.data.errors.password_confirmation;
+          }
+        });
     },
   },
 

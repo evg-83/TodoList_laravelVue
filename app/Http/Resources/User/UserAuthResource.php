@@ -22,7 +22,7 @@ class UserAuthResource extends JsonResource
             'name'     => $userAuth->name,
             'email'    => $userAuth->email,
             'password' => $userAuth->password,
-            'image'    => $userAuth->image,
+            'image'    => str_replace('images/', 'storage/images/', $userAuth->image),
         ];
     }
 }

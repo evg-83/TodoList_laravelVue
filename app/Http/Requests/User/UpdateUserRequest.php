@@ -23,7 +23,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name'     => 'nullable|string',
-            'image'    => 'nullable|array',
+            'image'    => 'nullable|file',
         ];
     }
 

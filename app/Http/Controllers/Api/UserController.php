@@ -11,6 +11,7 @@ use App\Http\Resources\User\UserAuthResource as UserAuResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -67,20 +68,11 @@ class UserController extends Controller
 
     public function updateUser(UpdateUserRequest $request, User $user)
     {
-        // return UserResource::make($user);
         $data = $request->validated();
 
         $image = isset($data['image']) ? $data['image'] : null;
 
         unset($data['image']);
-
-        // if (array_key_exists('image', $data)) {
-        //     $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-        // }
-
-        // if (array_key_exists('image', $data)) {
-        //     $user->image ? $user->update($data['image']) : $user->create($data['image']);
-        // }
 
         $user->update($data);
 
@@ -88,6 +80,14 @@ class UserController extends Controller
             $name = md5(Carbon::now().'_'.$image->getClientOriginalName())
                 .'.'.$image->getClientOriginalExtension();
             $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
+
+            $user->update([
+                'image' => $filePath,
+            ]);
+        } else {
+            $user->create([
+                'image' => $filePath,
+            ]);
         }
 
         return UserResource::make($user);

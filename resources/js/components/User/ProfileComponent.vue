@@ -92,9 +92,12 @@ export default {
       const fd = new FormData();
       fd.append("image", this.file);
       fd.append("name", this.name);
+      fd.append("_method", "PATCH");
+      this.name = ""
+      this.file = ""
       // console.log(fd);
       api
-        .patch(`/api/auth/${user}`, 
+        .post(`/api/auth/${user}`, 
           fd, {
           headers: {
             'Content-Type': 'multipart/form-data'

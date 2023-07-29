@@ -8,7 +8,7 @@
           <!-- <img :src="`${publicPath}img/E.jpeg`" alt=""> -->
 
           <ul
-            class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 h5"
+            class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 h5 mx-5"
           >
             <li>
               <router-link
@@ -35,7 +35,7 @@
             />
           </form> -->
 
-          <div class="dropdown text-end">
+          <div class="dropdown text-end mx-5">
             <a
               href="#"
               class="d-block link-dark text-decoration-none dropdown-toggle"
@@ -51,8 +51,8 @@
               />
             </a>
             <ul class="dropdown-menu text-primary">
-              <li><a class="dropdown-item" href="#">Tasks...</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Tasks...</a></li>
+              <li><a class="dropdown-item" href="#">Settings</a></li> -->
               <!-- <li>
                 <a
                   @click.prevent="pushEditUserId(id)"

@@ -21,6 +21,8 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('title')->nullable();
             $table->string('imageTask')->nullable();
+            $table->boolean('completed')->default(false);
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

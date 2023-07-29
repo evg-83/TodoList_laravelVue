@@ -23,7 +23,7 @@ class UserController extends Controller
             $data = [
                 'name'     => $request->name,
                 'email'    => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => $request->password,
             ];
 
             $user = User::where('email', $data['email'])->first();
@@ -70,22 +70,18 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $image = isset($data['image']) ? $data['image'] : null;
+        $image = isset($data['image']) ? $data['image'] : "";
 
         unset($data['image']);
 
         $user->update($data);
 
-        if ($image) {
-            $name = md5(Carbon::now().'_'.$image->getClientOriginalName())
-                .'.'.$image->getClientOriginalExtension();
+        if ($request->hasFile('image')) {
+            $name = md5(now() . '_' . $image->getClientOriginalName())
+                . '.' . $image->getClientOriginalExtension();
             $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
 
             $user->update([
-                'image' => $filePath,
-            ]);
-        } else {
-            $user->create([
                 'image' => $filePath,
             ]);
         }

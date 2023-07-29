@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Todolist;
 
+use App\Http\Resources\Task\TaskResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -29,8 +29,20 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 
         Route::group(['prefix' => 'todolist'], function () {
-            Route::post('/', [App\Http\Controllers\Api\TodolistController::class, 'storeTodolist']);
-            Route::get('/{todolist}', [App\Http\Controllers\Api\TodolistController::class, 'showTodolist']);
+            Route::get('/{todolist}/show', [App\Http\Controllers\Api\TodolistController::class, 'show']);
+            Route::post('/', [App\Http\Controllers\Api\TodolistController::class, 'store']);
+            Route::delete('/{todolist}', [App\Http\Controllers\Api\TodolistController::class, 'destroy']);
+
+            Route::group(['prefix' => 'tasks'], function () {
+                Route::get('/', [App\Http\Controllers\Api\TaskController::class, 'show']);
+                Route::post('/{todolist}', [App\Http\Controllers\Api\TaskController::class, 'storeTask']);
+                Route::patch('/{todolist}/{task}', [App\Http\Controllers\Api\TaskController::class, 'updateTask']);
+            });
+
+            Route::group(['prefix' => 'tags'], function () {
+                Route::get('/showTag', [App\Http\Controllers\Api\TagController::class, 'showTag']);
+                Route::post('/storeTag', [App\Http\Controllers\Api\TagController::class, 'storeTag']);
+            });
         });
     });
 });

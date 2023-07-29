@@ -62,7 +62,8 @@
   </div>
   <!-- end add new todolist modal -->
 
-  <div class="row p-2 col-md-11 shadow mx-auto border rounded">
+  <div class="form-mainDiv row p-2 col-md-11 shadow mx-auto border rounded">
+    <!-- start header todolists -->
     <header class="p-3 mb-3 border-bottom">
       <div class="container">
         <div
@@ -94,8 +95,9 @@
         </div>
       </div>
     </header>
+    <!-- end header todolists -->
 
-    <div class="row row-cols-1 row-cols-md-4  text-center">
+    <div class="row row-cols-1 row-cols-md-4 text-center">
       <div v-for="todolist in todolists" :key="todolist" class="col">
         <div class="card mb-4 rounded-3 shadow-sm">
           <div class="card-header py-3">
@@ -119,9 +121,18 @@
             <li>Email support</li>
             <li>Help center access</li>
           </ul> -->
-            <button type="button" class="w-100 btn btn-lg btn-outline-primary">
+            <!--             <button type="button" class="w-50 btn btn-lg btn-outline-primary">
               Sign up for free
             </button>
+          -->
+            <div class="pt-3">
+              <router-link
+                class="mx-xl-auto"
+                :to="{ name: 'todolist', params: { todolistId: todolist.id } }"
+              >
+                <i class="bi bi-eye text-info h4"></i>
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -154,37 +165,32 @@ export default {
         })
         .then((res) => {
           Swal.fire("Added!", "Todolist Added Successfully!", "success");
-          // $("#add_todolist_btn").text('Add Todolist');
-          // $("#add_todolist_form")[0].reset();
           $("#addTodolistModal").modal("hide");
-          // $("#addTodolistModal").on("hidden.bs.modal", function() {
-          //   this.$router.push({name: 'todolist'})
-          //   // location.reload();
-          // });
 
           this.title = null;
           this.todolists.push(res.data.data);
 
-          // console.log(res);
+          console.log(res);
         });
     },
 
     getTodolist() {
+      //деревянный вариант
+      // axios.get("/api/auth/home", {
+      //   headers: {
+      //     authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      //   },
+      // })
       api
         .get("/api/auth/home")
-        // .get("/api/auth/home", {
-        //   headers: {
-        //     authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        //   },
-        // })
         .then((res) => {
           // console.log(res.data.data);
           this.todolists = res.data.data;
-          // this.tasks = res.data[0];
         });
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+</style>

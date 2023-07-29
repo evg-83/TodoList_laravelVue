@@ -27,9 +27,10 @@ const routes = [
         component: () => import("../components/User/ProfileComponent.vue"),
       },
       {
-        path: "/todolist",
+        path: "/:todolistId(\\d+)",
         name: "todolist",
         component: () => import("../components/Todo/TodolistComponent.vue"),
+        props: true,
       },
       //TODO всегда нижний
       {

@@ -22,7 +22,7 @@ class TodolistController extends Controller
         return TodolistResource::collection($todolists);
     }
 
-    public function storeTodolist(TodolistRequest $request)
+    public function store(TodolistRequest $request)
     {
         $data = $request->validated();
 
@@ -36,20 +36,24 @@ class TodolistController extends Controller
         $todolist = Todolist::firstOrCreate($data);
 
         $response = [
-            'message' => 'User successfully registered.',
+            'message' => 'Todolist successfully created.',
             'data'    => TodolistResource::make($todolist),
         ];
 
         return response()->json($response, 200);
     }
 
-    public function showTodolist(Todolist $todolist)
+    public function show(Todolist $todolist)
     {
-        return TodolistResource::collection($todolist);
+        return new TodolistResource($todolist);
     }
 
-    public function edit()
+    public function destroy(Todolist $todolist)
     {
-        # code...
+        $todolist->delete();
+
+        return response([
+            'message' => 'Todolist successfully deleted.'
+        ]);
     }
 }

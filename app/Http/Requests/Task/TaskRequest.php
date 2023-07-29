@@ -22,24 +22,30 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'task'        => 'nullable|string',
+            'titleTask'   => 'nullable|string',
             'taskUserId'  => 'nullable|integer|exists:users,id',
-            'tag'         => 'nullable|string',
-            'tagTaskId'   => 'nullable|integer|exists:tasks,id',
-            'image'       => 'nullable|file',
-            'imageTaskId' => 'nullable|integer|exists:images,id',
+            'task'        => 'nullable',
+            'titleTag'    => 'nullable|string',
+            'tagUserId'   => 'nullable|integer|exists:users,id',
+            'tag_ids'     => 'nullable|array',
+            'tag_ids.*'   => 'nullable|integer|exists:tags,id',
+            'imageTask'   => 'nullable|file',
+            // 'imageTaskId' => 'nullable|integer|exists:images,id',
         ];
     }
 
     public function messages()
     {
         return [
-            'task.string'         => 'Данные должны соответствовать строчному типу',
+            'titleTask.string'    => 'Данные должны соответствовать строчному типу',
             'taskUserId.integer'  => 'Id пользователя должен быть числом',
             'taskUserId.exists'   => 'Id пользователя должен быть в БД',
-            'tag.string'          => 'Данные должны соответствовать строчному типу',
+            'titleTag.string'     => 'Данные должны соответствовать строчному типу',
             'tagTaskId.integer'   => 'Id task должен быть числом',
             'tagTaskId.exists'    => 'Id task должен быть в БД',
+            'tag_ids.array'       => 'Данные должны соответствовать array',
+            'tag_ids.integer'     => 'Id tag должен быть числом',
+            'tag_ids.exists'      => 'Id tag должен быть в БД',
             'image.file'          => 'Необходимо выбрать файл',
             'imageTaskId.integer' => 'Id файла должен быть числом',
             'imageTaskId.exists'  => 'Id файла должен быть в БД',

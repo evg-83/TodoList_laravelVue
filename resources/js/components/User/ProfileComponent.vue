@@ -85,9 +85,6 @@ export default {
     },
 
     upgradeUser(user) {
-      // const config = {
-      //   headers: { "content-type": "multipart/form-data" },
-      // };
 
       const fd = new FormData();
       fd.append("image", this.file);
@@ -97,25 +94,38 @@ export default {
       this.file = ""
       // console.log(fd);
       api
-        .post(`/api/auth/${user}`, 
+        .post(`/api/auth/${user}`,
           fd, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
       })
         .then((res) => {
-          // Swal.fire("Added!", "User Upgrade Successfully!", "success");
+          Swal.fire("Added!", "User Upgrade Successfully!", "success");
 
-          console.log(res);
-          // this.name.push(res.data.data[0].name);
-          // this.image.push(res.data.data[0].image);
-          // this.$router.push({name: 'home'})
+          // console.log(res);
+
+          //!!!!! найти решение как добавить в data значение !!!!!!
+          // if (typeof fd.get('name') === 'undefined' || fd.get('name') === null ) {
+          //   this.name;
+          // } else {
+          //   // console.log(res.data.data.name);
+          //   this.name.push(res.data.data.name);
+          // }
+          // if (typeof fd.get('image') === 'undefined' || fd.get('image') === null ) {
+          //   this.image;
+          // } else {
+          //   // console.log(res.data.data.image)
+          //   this.image.push(res.data.data.image);
+          // }
+
+          this.$router.push({name: 'home'})
         });
     },
 
     onFileSelected() {
       this.file = this.$refs.file.files[0];
-      console.log(this.file);
+      console.log(this.$refs.file);
     },
   },
 };

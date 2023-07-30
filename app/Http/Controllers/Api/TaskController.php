@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\TaskRequest;
 use App\Http\Resources\Task\TaskResource;
-use App\Models\Tag;
 use App\Models\Task;
 use App\Models\Todolist;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
@@ -48,9 +46,7 @@ class TaskController extends Controller
 
         $task->tags()->attach($tags);
 
-        return response()->json([
-            //
-        ]);
+        return response()->json([], 200);
         // return TaskResource::make($task);
     }
 
@@ -78,15 +74,12 @@ class TaskController extends Controller
         // return new TaskResource($taskUpd);
     }
 
-    //TODO перенести в Service
-    private function getTagIds($tags)
+    public function destroyTask(Todolist $todolist, Task $task)
     {
-        $tagIds = [];
+        $task->delete();
 
-        foreach ($tags as $tag) {
-            $tag = !isset($tag['id']) ? Tag::create($tag) : Tag::find($tag['id']);
-            $tagIds[] = $tag->id;
-        }
-        return $tagIds;
+        return response()->json([
+            'message' => 'Task deleted successfully'
+        ]);
     }
 }

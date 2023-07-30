@@ -81,7 +81,6 @@ export default {
       titleTask: null,
       file: null,
       tagsArrUp: [], // This will store the selected tag titles, not tag IDs
-      // tagsArr: [],
       tagIdMap: {}, // Create a mapping of tag names to tag IDs
     };
   },
@@ -131,6 +130,13 @@ export default {
     createTask() {
       // Convert the selected tag titles to tag IDs using the tagIdMap
       const tagIds = this.tagsArrUp.map((tagName) => this.tagIdMap[tagName]);
+
+      // Check if the tagIds array contains only integers
+      if (!tagIds.every((id) => Number.isInteger(id))) {
+        console.error("Invalid tag_ids data. All values must be integers.");
+        return; // Return early to prevent making the API call with invalid data
+      }
+
       const fd = new FormData();
 
       if (this.file) {

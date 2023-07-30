@@ -51,8 +51,6 @@ export default {
     this.getTodolist();
     this.getTask();
     this.getTags();
-    // console.log(this.$props.todolistId);
-    // console.log(this.$route.params);
   },
 
   methods: {

@@ -42,7 +42,11 @@
             <a v-if="!task.completed" href="" class="text-success mx-1 editIcon">
               <i class="bi bi-pencil-square h4"></i>
             </a>
-            <a href="" class="text-danger mx-1 deleteIcon">
+            <a
+            @click.prevent="deleteTask()"
+            class="text-danger mx-1 deleteIcon"
+            href=""
+            >
               <i class="bi bi-trash h4"></i>
             </a>
           </td>
@@ -78,6 +82,16 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    deleteTask() {
+      api.delete(`/api/auth/todolist/tasks/${this.$props.todolistId}/${this.task.id}`)
+        .then(res => {
+          this.$emit("taskChanged")
+        })
+        .catch(error => {
+        console.log(error);
+      })
     },
   },
 };

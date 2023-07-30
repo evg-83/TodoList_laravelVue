@@ -5,9 +5,9 @@
     :key="index"
   >
     <list-task-component
-    :task="task"
-    :todolistId="todolistId"
-    v-on:taskChanged="$emit('reloadList')"
+      :task="task"
+      :todolistId="todolistId"
+      v-on:taskChanged="$emit('reloadList')"
     />
   </div>
 </template>
@@ -18,16 +18,20 @@ import ListTaskComponent from "./ListTaskComponent.vue";
 export default {
   name: "TaskViewComponent",
 
-  props: [
-    "tasks",
-    "todolistId",
-  ],
+  props: ["tasks", "todolistId"],
 
   emits: ["reloadList"],
 
   components: {
     ListTaskComponent,
   },
+
+  // computed: {
+  //   filteredTasks() {
+  //     // Filter tasks based on the todolistId
+  //     return this.tasks.filter((task) => task.todolist_id === this.todolistId);
+  //   },
+  // },
 };
 </script>
 

@@ -1,22 +1,30 @@
 <template>
-  <div class="row p-2 col-md-11 shadow mx-auto border rounded">
+  <div v-cloak class="row p-2 col-md-11 shadow mx-auto border rounded">
     <div class="row p-2 mt-3 col-md-8 shadow mx-auto border rounded">
       <div
         class="container-fluid d-flex justify-content-between align-items-center mt-2"
       >
         <h2 class="mx-5" id="title">Todolist: {{ title }}</h2>
-        <a @click.prevent="destroyTodolist" href="">
+        <a
+          v-if="userId === userIdTodolist"
+          @click.prevent="destroyTodolist"
+          href=""
+        >
           <i class="bi bi-trash text-danger h4 mx-3"></i>
         </a>
       </div>
     </div>
     <addtask-component
+      v-if="userId === userIdTodolist"
       v-on:reloadList="getTask()"
       :todolistId="todolistId"
       :tagsArr="tagsArr"
       @reloadListTags="updateTagsArr"
+      @user-auth-updated="updateUserId"
     />
     <task-view-component
+      :userId="userId"
+      :userIdTodolist="userIdTodolist"
       :todolistId="todolistId"
       :tasks="tasks"
       v-on:reloadList="getTask()"
@@ -41,9 +49,11 @@ export default {
 
   data() {
     return {
+      userIdTodolist: null,
       title: null,
       tasks: [],
       tagsArr: [],
+      userId: null, // Initialize userId as null in the parent component
     };
   },
 
@@ -60,6 +70,7 @@ export default {
         .then((res) => {
           // console.log(res.data.data);
           this.title = res.data.data.title;
+          this.userIdTodolist = res.data.data.user_id;
         })
         .catch((err) => {
           console.log(err);
@@ -106,8 +117,17 @@ export default {
     updateTagsArr() {
       this.getTags();
     },
+
+    // Define a method to update the userId when the custom event is received
+    updateUserId(userId) {
+      this.userId = userId;
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>

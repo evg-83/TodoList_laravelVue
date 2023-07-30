@@ -1,5 +1,5 @@
 <template>
-  <div class="row col-md-8 shadow mx-auto border rounded mb-2">
+  <div v-cloak class="row col-md-8 shadow mx-auto border rounded mb-2">
     <div class="border-bottom mt-3">
       <div
         class="container-fluid d-flex justify-content-between align-items-center mb-3 mt-3"
@@ -71,7 +71,7 @@ export default {
 
   props: ["todolistId", "tagsArr"],
 
-  emits: ["reloadList"],
+  emits: ["reloadList", "user-auth-updated"],
 
   data() {
     return {
@@ -104,6 +104,9 @@ export default {
         .get("/api/auth/showAuthUser")
         .then((res) => {
           this.userId = res.data.data[0].id;
+
+          // Emit the custom event to notify the parent component about the userId
+          this.$emit("user-auth-updated", this.userId);
         })
         .catch((error) => {
           console.log(error);
@@ -205,6 +208,9 @@ export default {
       const fileInput = this.$refs.file;
 
       if (fileInput) {
+        // Get the parent node of the current file input before removing it
+        const parent = fileInput.parentNode;
+
         // Create a new input element
         const newFileInput = document.createElement("input");
         newFileInput.type = "file";
@@ -212,7 +218,7 @@ export default {
         newFileInput.setAttribute("class", fileInput.getAttribute("class"));
 
         // Replace the current file input with the new one
-        fileInput.parentNode.replaceChild(newFileInput, fileInput);
+        parent.replaceChild(newFileInput, fileInput);
 
         // Add the change event listener to the new file input
         newFileInput.addEventListener("change", this.onFileImgSelected);
@@ -230,4 +236,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>

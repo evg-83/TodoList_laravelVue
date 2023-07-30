@@ -1,10 +1,12 @@
 <template>
-  <div class="row col-md-8 shadow mx-auto border rounded mb-2">
+  <div v-cloak class="row col-md-8 shadow mx-auto border rounded mb-2">
     <list-task-component
       v-for="(task, index) in filteredTasks"
       :key="index"
       :task="task"
       :todolistId="todolistId"
+      :userId="userId"
+      :userIdTodolist="userIdTodolist"
       v-on:taskChanged="$emit('reloadList')"
     />
   </div>
@@ -16,7 +18,7 @@ import ListTaskComponent from "./ListTaskComponent.vue";
 export default {
   name: "TaskViewComponent",
 
-  props: ["tasks", "todolistId"],
+  props: ["tasks", "todolistId", "userIdTodolist", "userId"],
 
   emits: ["reloadList"],
 
@@ -33,4 +35,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+[v-cloak] {
+  display: none;
+}
+</style>

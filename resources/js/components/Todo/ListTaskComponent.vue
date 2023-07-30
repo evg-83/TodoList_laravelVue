@@ -2,11 +2,11 @@
   <!-- <div
     class="container-fluid d-flex justify-content-between align-items-center mt-3"
   > -->
-  <div class="card-body mt-3">
+  <div v-cloak class="card-body mt-3">
     <table class="table table-bordered table-sm text-center align-middle">
       <tbody>
         <tr>
-          <td style="width: 5%;">
+          <td v-if="userId === userIdTodolist" style="width: 5%;">
             <input
               type="checkbox"
               @change="updateCheck()"
@@ -38,7 +38,7 @@
               />
             </a>
           </td>
-          <td style="width: 10%;" class="">
+          <td v-if="userId === userIdTodolist" style="width: 10%;" class="">
             <a v-if="!task.completed" href="" class="text-success mx-1 editIcon">
               <i class="bi bi-pencil-square h4"></i>
             </a>
@@ -62,7 +62,7 @@ import api from "../../api";
 export default {
   name: "ListTaskComponent",
 
-  props: ["task", "todolistId"],
+  props: ["task", "todolistId", "userId", "userIdTodolist"],
 
   emits: ["taskChanged"],
 
@@ -101,5 +101,9 @@ export default {
 .completed {
   text-decoration: line-through;
   color: #999999;
+}
+
+[v-cloak] {
+  display: none;
 }
 </style>

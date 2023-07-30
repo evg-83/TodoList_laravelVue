@@ -40,7 +40,7 @@
       >
         <option selected>Add Tags...</option>
         <!-- <div v-for="tag in tags" :key="tag"> -->
-        <option v-for="tag in tagsArr" :key="tag">
+        <option v-for="tag in filteredTags" :key="tag.id">
           {{ tag.titleTag }}
         </option>
         <!-- </div> -->
@@ -82,14 +82,34 @@ export default {
       file: null,
       tagsArrUp: [], // This will store the selected tag titles, not tag IDs
       tagIdMap: {}, // Create a mapping of tag names to tag IDs
+      userId: null,
     };
   },
 
   mounted() {
     this.getTags();
+    this.getUserAuth();
+  },
+
+  computed: {
+    filteredTags() {
+      // Filter the tags based on the userId
+      return this.tagsArr.filter((tag) => tag.user_id === this.userId);
+    },
   },
 
   methods: {
+    getUserAuth() {
+      api
+        .get("/api/auth/showAuthUser")
+        .then((res) => {
+          this.userId = res.data.data[0].id;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     getTags() {
       api
         .get("/api/auth/todolist/tags/showTag")
@@ -132,9 +152,16 @@ export default {
       const tagIds = this.tagsArrUp.map((tagName) => this.tagIdMap[tagName]);
 
       // Check if the tagIds array contains only integers
-      if (!tagIds.every((id) => Number.isInteger(id))) {
-        console.error("Invalid tag_ids data. All values must be integers.");
-        return; // Return early to prevent making the API call with invalid data
+      // if (!tagIds.every((id) => Number.isInteger(id))) {
+      //   console.error("Invalid tag_ids data. All values must be integers.");
+      //   return; // Return early to prevent making the API call with invalid data
+      // }
+
+      // Filter out any invalid or undefined tagIds
+      const validTagIds = tagIds.filter((id) => Number.isInteger(id));
+
+      if (validTagIds.length !== tagIds.length) {
+        console.error("Invalid tag_ids data. Some values are not integers.");
       }
 
       const fd = new FormData();

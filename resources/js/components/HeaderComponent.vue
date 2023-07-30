@@ -61,7 +61,13 @@
                   >Profile</a
                 >
               </li> -->
-              <li><router-link class="dropdown-item" :to="{name: 'user.profile'}">Profile</router-link></li>
+              <li>
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'user.profile' }"
+                  >Profile</router-link
+                >
+              </li>
               <li>
                 <hr class="dropdown-divider" />
               </li>
@@ -99,13 +105,18 @@ export default {
 
   methods: {
     getUserAuth() {
-      api.get('/api/auth/showAuthUser').then((res) => {
-        // console.log(res.data.data[0].image);
-        this.id = res.data.data[0].id;
-        this.image = res.data.data[0].image;
-        // this.image = res.data.data.image;
-        // this.userAuthImage = res.data[1][0];
-      });
+      api
+        .get("/api/auth/showAuthUser")
+        .then((res) => {
+          // console.log(res.data.data[0].image);
+          this.id = res.data.data[0].id;
+          this.image = res.data.data[0].image;
+          // this.image = res.data.data.image;
+          // this.userAuthImage = res.data[1][0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     logout() {

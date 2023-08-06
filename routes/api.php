@@ -36,7 +36,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
             Route::group(['prefix' => 'tasks'], function () {
                 Route::get('/', [App\Http\Controllers\Api\TaskController::class, 'show']);
                 Route::post('/{todolist}', [App\Http\Controllers\Api\TaskController::class, 'storeTask']);
-                Route::patch('/{todolist}/{task}', [App\Http\Controllers\Api\TaskController::class, 'updateTask']);
+                Route::patch('/{todolist}/{task}/update', [App\Http\Controllers\Api\TaskController::class, 'updateTask']);
                 Route::delete('/{todolist}/{task}', [App\Http\Controllers\Api\TaskController::class, 'destroyTask']);
             });
 

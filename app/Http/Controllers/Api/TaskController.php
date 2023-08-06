@@ -54,24 +54,30 @@ class TaskController extends Controller
     {
         $data = $request->validated();
 
-        $dataCompleted = isset($data['task']['completed']) ? $data['task']['completed'] : "";
+        $image = isset($data['imageTask']) ? $data['imageTask'] : "";
+        $tags  = isset($data['tag_ids']) ? $data['tag_ids'] : "";
 
-        if ($task) {
-            // $task->completed    = $dataCompleted ? true : false;
-            // $task->completed_at = $dataCompleted ? Carbon::now() : null;
+        unset($data['imageTask'], $data['tag_ids']);
 
-            $data = [
-                'completed'    => $dataCompleted ? true : false,
-                'completed_at' => $dataCompleted ? now() : null,
-            ];
+        $data = [
+            'todolist_id' => $todolist->id,
+            'title'       => $request->titleTask,
+        ];
 
-            $taskUpd = $task->update($data);
+        $task->update($data);
+
+        if ($request->hasFile('imageTask')) {
+            $name     = md5(now() . '_' . $image->getClientOriginalName()) . '.' . $image->getClientOriginalExtension();
+            $filePath = Storage::disk('public')->putFileAs('/images', $image, $name);
+
+            $task->update([
+                'imageTask' => $filePath,
+            ]);
         }
 
-        return response()->json([
-            'message' => 'Task updated successfully'
-        ]);
-        // return new TaskResource($taskUpd);
+        $task->tags()->sync($tags);
+
+        return response()->json([], 200);
     }
 
     public function destroyTask(Todolist $todolist, Task $task)

@@ -6,28 +6,24 @@
     <table class="table table-bordered table-sm text-center align-middle">
       <tbody>
         <tr>
-          <td v-if="userId === userIdTodolist" style="width: 5%;">
+          <td v-if="userId === userIdTodolist" style="width: 5%">
             <input
               type="checkbox"
               @change="updateCheck()"
               v-model="task.completed"
             />
           </td>
-          <td style="width: 40%;">
+          <td style="width: 40%">
             <div :class="[task.completed ? 'completed' : '']">
               {{ task.title }}
             </div>
           </td>
-          <td style="width: 20%;">
-            <div
-              v-for="tag in task.tags"
-              :key="tag"
-              class=""
-            >
+          <td style="width: 20%">
+            <div v-for="tag in task.tags" :key="tag" class="">
               {{ tag["title"] }}
             </div>
           </td>
-          <td  style="width: 13%;">
+          <td style="width: 13%">
             <a class="" href="">
               <img
                 v-if="task.imageTask"
@@ -38,14 +34,19 @@
               />
             </a>
           </td>
-          <td v-if="userId === userIdTodolist" style="width: 10%;" class="">
-            <a v-if="!task.completed" href="" class="text-success mx-1 editIcon">
+          <td v-if="userId === userIdTodolist" style="width: 10%" class="">
+            <a
+              v-if="!task.completed"
+              href=""
+              class="text-success mx-1 editIcon"
+              @click.prevent="changeEditTaskId(task.id)"
+            >
               <i class="bi bi-pencil-square h4"></i>
             </a>
             <a
-            @click.prevent="deleteTask()"
-            class="text-danger mx-1 deleteIcon"
-            href=""
+              @click.prevent="deleteTask()"
+              class="text-danger mx-1 deleteIcon"
+              href=""
             >
               <i class="bi bi-trash h4"></i>
             </a>
@@ -64,7 +65,7 @@ export default {
 
   props: ["task", "todolistId", "userId", "userIdTodolist"],
 
-  emits: ["taskChanged"],
+  emits: ["changeEditTaskId"],
 
   methods: {
     updateCheck() {
@@ -85,13 +86,22 @@ export default {
     },
 
     deleteTask() {
-      api.delete(`/api/auth/todolist/tasks/${this.$props.todolistId}/${this.task.id}`)
-        .then(res => {
-          this.$emit("taskChanged")
+      api
+        .delete(
+          `/api/auth/todolist/tasks/${this.$props.todolistId}/${this.task.id}`
+        )
+        .then((res) => {
+          this.$emit("taskChanged");
         })
-        .catch(error => {
-        console.log(error);
-      })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    changeEditTaskId(id) {
+      // console.log(id);
+      this.editTaskId = id
+      this.$emit("changeEditTaskId", this.editTaskId);
     },
   },
 };

@@ -23,6 +23,7 @@
       @user-auth-updated="updateUserId"
     />
     <task-view-component
+      :tagsArr="tagsArr"
       :userId="userId"
       :userIdTodolist="userIdTodolist"
       :todolistId="todolistId"

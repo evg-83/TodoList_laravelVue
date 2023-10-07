@@ -17,8 +17,8 @@ class Tag extends Model
 
     protected $guarded = false;
 
-    // public function todolists()
-    // {
-    //     return $this->belongsToMany( Task::class, 'task_tags', );
-    // }
+     public function todolists()
+     {
+         return $this->belongsToMany( Task::class, 'task_tags', );
+     }
 }
